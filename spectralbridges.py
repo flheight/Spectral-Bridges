@@ -73,10 +73,10 @@ class SpectralBridges:
         gamma = np.log(M) / (q3 - q1)
         affinity = np.exp(gamma * affinity)
 
-        spclus = _SpectralClustering(n_clusters=self.n_clusters, random_state=self.random_state)
-        spclus.fit(affinity)
+        spectralclustering = _SpectralClustering(n_clusters=self.n_clusters, random_state=self.random_state)
+        spectralclustering.fit(affinity)
 
-        self.clusters = [kmeans.cluster_centers_[spclus.labels_ == i] for i in range(self.n_clusters)]
+        self.clusters = [kmeans.cluster_centers_[spectralclustering.labels_ == i] for i in range(self.n_clusters)]
 
     def predict(self, x):
         min_dists = np.empty((self.n_clusters, x.shape[0]))
