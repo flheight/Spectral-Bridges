@@ -7,32 +7,51 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 
-#set seed
+# set seed
 np.random.seed(0)
 
 # Function to load data
 def load_data(file_name):
-    data = np.genfromtxt(f'datasets/{file_name}', delimiter=',')
+    data = np.genfromtxt(f"datasets/{file_name}", delimiter=",")
     X, y = data[:, :-1], data[:, -1]
     return X, y
 
+
 # List of files
-files = ['impossible.csv', 'moons.csv', 'circles.csv', 'smile.csv']
+files = ["impossible.csv", "moons.csv", "circles.csv", "smile.csv"]
 
 # List of parameters
 
 params = {
-    'impossible.csv' : {'DBSCAN' : {'eps' : .5, 'min_samples' : 8}, 'SpectralBridges' : {'n_nodes' : 250}},
-    'moons.csv' : {'DBSCAN' : {'eps' : .125, 'min_samples' : 12}, 'SpectralBridges' : {'n_nodes' : 12}},
-    'circles.csv' : {'DBSCAN' : {'eps' : .1, 'min_samples' : 5}, 'SpectralBridges' : {'n_nodes' : 25}},
-    'smile.csv' : {'DBSCAN' : {'eps' : .125, 'min_samples' : 12}, 'SpectralBridges' : {'n_nodes' : 100}}
-    }
+    "impossible.csv": {
+        "DBSCAN": {"eps": 0.5, "min_samples": 8},
+        "SpectralBridges": {"n_nodes": 250},
+    },
+    "moons.csv": {
+        "DBSCAN": {"eps": 0.125, "min_samples": 12},
+        "SpectralBridges": {"n_nodes": 12},
+    },
+    "circles.csv": {
+        "DBSCAN": {"eps": 0.1, "min_samples": 5},
+        "SpectralBridges": {"n_nodes": 25},
+    },
+    "smile.csv": {
+        "DBSCAN": {"eps": 0.125, "min_samples": 12},
+        "SpectralBridges": {"n_nodes": 100},
+    },
+}
 
 # Number of repetitions
 N = 200
 
 # Initialize results dictionary
-results = {'DBSCAN': {}, 'KMeans': {}, 'GaussianMixture': {}, 'AgglomerativeClustering': {}, 'SpectralBridges' : {}}
+results = {
+    "DBSCAN": {},
+    "KMeans": {},
+    "GaussianMixture": {},
+    "AgglomerativeClustering": {},
+    "SpectralBridges": {},
+}
 
 # Iterate through each file
 for file in files:
@@ -56,7 +75,10 @@ for file in files:
 
     for i in range(N):
         # DBSCAN
-        dbscan = DBSCAN(eps=params[file]['DBSCAN']['eps'], min_samples=params[file]['DBSCAN']['min_samples'])
+        dbscan = DBSCAN(
+            eps=params[file]["DBSCAN"]["eps"],
+            min_samples=params[file]["DBSCAN"]["min_samples"],
+        )
         y_pred_dbscan = dbscan.fit_predict(X)
         dbscan_ari[i] = adjusted_rand_score(y, y_pred_dbscan)
         dbscan_nmi[i] = normalized_mutual_info_score(y, y_pred_dbscan)
@@ -80,7 +102,11 @@ for file in files:
         agg_nmi[i] = normalized_mutual_info_score(y, y_pred_agg)
 
         # Spectral-Bridges
-        sb = SpectralBridges(n_clusters=n_clusters, n_nodes=params[file]['SpectralBridges']['n_nodes'], random_state=i)
+        sb = SpectralBridges(
+            n_clusters=n_clusters,
+            n_nodes=params[file]["SpectralBridges"]["n_nodes"],
+            random_state=i,
+        )
         sb.fit(X)
         y_pred_sb = sb.predict(X)
         sb_ari[i] = adjusted_rand_score(y, y_pred_sb)
@@ -89,34 +115,25 @@ for file in files:
         print(f"File : {file}, {int((100 * i) / N)}% done")
 
     # Store results in dictionary
-    results['DBSCAN'][file] = {
-        'ARI': dbscan_ari,
-        'NMI': dbscan_nmi
-    }
+    results["DBSCAN"][file] = {"ARI": dbscan_ari, "NMI": dbscan_nmi}
 
-    results['KMeans'][file] = {
-        'ARI': kmeans_ari,
-        'NMI': kmeans_nmi
-    }
+    results["KMeans"][file] = {"ARI": kmeans_ari, "NMI": kmeans_nmi}
 
-    results['GaussianMixture'][file] = {
-        'ARI': gm_ari,
-        'NMI': gm_nmi
-    }
+    results["GaussianMixture"][file] = {"ARI": gm_ari, "NMI": gm_nmi}
 
-    results['AgglomerativeClustering'][file] = {
-        'ARI': agg_ari,
-        'NMI': agg_nmi
-    }
+    results["AgglomerativeClustering"][file] = {"ARI": agg_ari, "NMI": agg_nmi}
 
-    results['SpectralBridges'][file] = {
-        'ARI': sb_ari,
-        'NMI': sb_nmi
-    }
+    results["SpectralBridges"][file] = {"ARI": sb_ari, "NMI": sb_nmi}
 
 # Define files, methods, and metrics
 file_labels = ["Impossible", "Moons", "Circles", "Smile"]
-methods = ["DBSCAN", "KMeans", "GaussianMixture", "AgglomerativeClustering", "SpectralBridges"]
+methods = [
+    "DBSCAN",
+    "KMeans",
+    "GaussianMixture",
+    "AgglomerativeClustering",
+    "SpectralBridges",
+]
 metrics = ["ARI", "NMI"]
 
 # Define colors for each method
@@ -125,7 +142,7 @@ method_colors = {
     "KMeans": "blue",
     "GaussianMixture": "green",
     "AgglomerativeClustering": "red",
-    "SpectralBridges": "purple"
+    "SpectralBridges": "purple",
 }
 
 # Define method labels for the legend
@@ -134,7 +151,7 @@ method_labels = {
     "KMeans": "KM",
     "GaussianMixture": "EM",
     "AgglomerativeClustering": "WC",
-    "SpectralBridges": "SB"
+    "SpectralBridges": "SB",
 }
 
 # Create boxplots for ARI and NMI
@@ -144,7 +161,7 @@ fig = make_subplots(
     shared_xaxes=True,
     subplot_titles=("ARI", "NMI"),
     vertical_spacing=0.05,  # Reduce vertical spacing
-    horizontal_spacing=0.075  # Reduce horizontal spacing
+    horizontal_spacing=0.075,  # Reduce horizontal spacing
 )
 
 # Helper function to add traces
@@ -157,13 +174,18 @@ def add_traces(fig, metric, col):
                     go.Box(
                         y=data,
                         name=method_labels[method],  # Use method labels for legend
-                        boxmean='sd',
-                        marker=dict(color=method_colors[method]),  # Assign color based on method
-                        text=[method_labels[method]] * len(data),  # Text annotation for each box
+                        boxmean="sd",
+                        marker=dict(
+                            color=method_colors[method]
+                        ),  # Assign color based on method
+                        text=[method_labels[method]]
+                        * len(data),  # Text annotation for each box
                         hoverinfo="text",
                     ),
-                    row=files.index(file) + 1, col=col  # Row index starts from 1
+                    row=files.index(file) + 1,
+                    col=col,  # Row index starts from 1
                 )
+
 
 # Add traces for ARI and NMI
 for col, metric in enumerate(metrics, start=1):
@@ -172,7 +194,9 @@ for col, metric in enumerate(metrics, start=1):
 # Update layout
 for i, file in enumerate(file_labels, start=1):
     fig.update_yaxes(title_text=file, row=i, col=1)
-    fig.update_xaxes(title_text="", row=i, col=1)  # Remove x-axis label for better space utilization
+    fig.update_xaxes(
+        title_text="", row=i, col=1
+    )  # Remove x-axis label for better space utilization
 
 fig.update_layout(
     height=1600,
@@ -180,7 +204,7 @@ fig.update_layout(
     title_text="",
     showlegend=False,
     legend_title_text="Methods",
-    font=dict(size=20)  # Increase font size
+    font=dict(size=20),  # Increase font size
 )
 
 for i in range(2):
@@ -189,4 +213,3 @@ for i in range(2):
 
 # Save the figure as an HTML file
 pio.write_image(fig, "synthetic_summary.pdf")
-
