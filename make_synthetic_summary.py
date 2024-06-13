@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 
-# set seed
+# Set seed
 np.random.seed(0)
 
 # Function to load data
