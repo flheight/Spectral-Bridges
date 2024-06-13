@@ -12,9 +12,9 @@ X, y = data[:, :-1], data[:, -1]
 
 k = 4
 
-net = SpectralBridges(n_classes=k)
+net = SpectralBridges(n_clusters=k, n_nodes=100)
 
-net.fit(X, 100)
+net.fit(X)
 
 colors = plt.cm.tab10(np.arange(k))
 
