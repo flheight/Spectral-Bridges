@@ -10,11 +10,11 @@ data = np.genfromtxt('datasets/circles.csv', delimiter=',')
 
 X, y = data[:, :-1], data[:, -1]
 
-k = 7
+k = 2
 
-net = SpectralBridges(n_clusters=k)
+net = SpectralBridges(n_clusters=k, n_nodes=25)
 
-net.fit(X, 250)
+net.fit(X)
 
 colors = plt.cm.tab10(np.arange(k))
 
