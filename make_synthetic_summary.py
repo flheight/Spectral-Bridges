@@ -80,8 +80,8 @@ for file in files:
         agg_nmi[i] = normalized_mutual_info_score(y, y_pred_agg)
 
         # Spectral-Bridges
-        sb = SpectralBridges(n_clusters=n_clusters, random_state=i)
-        sb.fit(X, n_nodes=params[file]['SpectralBridges']['n_nodes'])
+        sb = SpectralBridges(n_clusters=n_clusters, n_nodes=params[file]['SpectralBridges']['n_nodes'], random_state=i)
+        sb.fit(X)
         y_pred_sb = sb.predict(X)
         sb_ari[i] = adjusted_rand_score(y, y_pred_sb)
         sb_nmi[i] = normalized_mutual_info_score(y, y_pred_sb)
