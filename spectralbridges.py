@@ -131,9 +131,12 @@ class SpectralBridges:
         Predict the nearest cluster index for each input data point x.
     """
 
-    def __init__(self, n_clusters, n_nodes, n_local_trials=None, random_state=None):
+    def __init__(
+        self, n_clusters, n_nodes, n_iter=20, n_local_trials=None, random_state=None
+    ):
         self.n_clusters = n_clusters
         self.n_nodes = n_nodes
+        self.n_iter = n_iter
         self.n_local_trials = n_local_trials
         self.random_state = random_state
 
@@ -149,6 +152,7 @@ class SpectralBridges:
         """
         kmeans = _KMeans(
             self.n_nodes,
+            n_iter=self.n_iter,
             n_local_trials=self.n_local_trials,
             random_state=self.random_state,
         )
