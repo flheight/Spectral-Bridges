@@ -14,7 +14,7 @@ class _KMeans:
         index = faiss.IndexFlatL2(X.shape[1])
         kmeans = faiss.Clustering(X.shape[1], self.n_clusters)
         init_centroids = kmeans_plusplus(
-            X, self.n_clusters, random_state=self.random_state
+            X, self.n_clusters, n_local_trials=1, random_state=self.random_state
         )[0].astype(np.float32)
 
         kmeans.centroids.resize(init_centroids.size)
