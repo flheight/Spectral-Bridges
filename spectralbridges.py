@@ -131,9 +131,10 @@ class SpectralBridges:
         Predict the nearest cluster index for each input data point x.
     """
 
-    def __init__(self, n_clusters, n_nodes, random_state=None):
+    def __init__(self, n_clusters, n_nodes, n_local_trials=None, random_state=None):
         self.n_clusters = n_clusters
         self.n_nodes = n_nodes
+        self.n_local_trials = n_local_trials
         self.random_state = random_state
 
     def fit(self, X, M=1e4):
@@ -146,7 +147,11 @@ class SpectralBridges:
         M : float, optional, default=1e4
             Scaling parameter for affinity matrix computation.
         """
-        kmeans = _KMeans(self.n_nodes, random_state=self.random_state)
+        kmeans = _KMeans(
+            self.n_nodes,
+            n_local_trials=self.n_local_trials,
+            random_state=self.random_state,
+        )
         kmeans.fit(X)
 
         affinity = np.empty((self.n_nodes, self.n_nodes))
