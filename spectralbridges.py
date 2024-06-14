@@ -14,7 +14,7 @@ class _KMeans:
         index = faiss.IndexFlatL2(X.shape[1])
         kmeans = faiss.Clustering(X.shape[1], self.n_clusters)
         init_centroids = kmeans_plusplus(
-            X, n_clusters=self.n_clusters, random_state=self.random_state
+            X, self.n_clusters, random_state=self.random_state
         )[0].astype(np.float32)
 
         kmeans.centroids.resize(init_centroids.size)
@@ -45,7 +45,7 @@ class _SpectralClustering:
         eigvecs = np.linalg.eigh(L)[1]
         eigvecs = eigvecs[:, : self.n_clusters]
         eigvecs /= np.linalg.norm(eigvecs, axis=1)[:, np.newaxis]
-        kmeans = _KMeans(n_clusters=self.n_clusters, random_state=self.random_state)
+        kmeans = _KMeans(self.n_clusters, random_state=self.random_state)
         kmeans.fit(eigvecs)
 
         self.labels_ = kmeans.labels_
@@ -58,7 +58,7 @@ class SpectralBridges:
         self.random_state = random_state
 
     def fit(self, X, M=1e4):
-        kmeans = _KMeans(n_clusters=self.n_nodes, random_state=self.random_state)
+        kmeans = _KMeans(self.n_nodes, random_state=self.random_state)
         kmeans.fit(X)
 
         affinity = np.empty((self.n_nodes, self.n_nodes))
@@ -91,7 +91,7 @@ class SpectralBridges:
         affinity = np.exp(gamma * affinity)
 
         spectralclustering = _SpectralClustering(
-            n_clusters=self.n_clusters, random_state=self.random_state
+            self.n_clusters, random_state=self.random_state
         )
         spectralclustering.fit(affinity)
 
