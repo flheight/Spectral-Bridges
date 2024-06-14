@@ -1,1 +1,1 @@
-Highly optimized using Faiss
+Highly optimized using FAISS
