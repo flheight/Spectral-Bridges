@@ -120,35 +120,46 @@ class SpectralBridges:
         The number of clusters to form.
     n_nodes : int
         Number of nodes or initial clusters.
+    M : float, optional, default=1e4
+        Scaling parameter for affinity matrix computation.
+    n_iter : int, optional, default=20
+        Number of iterations to run the k-means algorithm.
+    n_local_trials : int or None, optional, default=None
+        Number of seeding trials for centroids initialization.
     random_state : int or None, optional, default=None
         Determines random number generation for centroid initialization.
 
     Methods:
     --------
-    fit(X, M=1e4):
+    fit(X):
         Fit the Spectral Bridges model on the input data X.
     predict(x):
         Predict the nearest cluster index for each input data point x.
     """
 
     def __init__(
-        self, n_clusters, n_nodes, n_iter=20, n_local_trials=None, random_state=None
+        self,
+        n_clusters,
+        n_nodes,
+        M=1e4,
+        n_iter=20,
+        n_local_trials=None,
+        random_state=None,
     ):
         self.n_clusters = n_clusters
         self.n_nodes = n_nodes
+        self.M = M
         self.n_iter = n_iter
         self.n_local_trials = n_local_trials
         self.random_state = random_state
 
-    def fit(self, X, M=1e4):
+    def fit(self, X):
         """Fit the Spectral Bridges model on the input data X.
 
         Parameters:
         -----------
         X : numpy.ndarray
             Input data to cluster.
-        M : float, optional, default=1e4
-            Scaling parameter for affinity matrix computation.
         """
         kmeans = _KMeans(
             self.n_nodes,
@@ -184,7 +195,7 @@ class SpectralBridges:
 
         q1, q3 = np.quantile(affinity, [0.25, 0.75])
 
-        gamma = np.log(M) / (q3 - q1)
+        gamma = np.log(self.M) / (q3 - q1)
         affinity = np.exp(gamma * affinity)
 
         spectralclustering = _SpectralClustering(
