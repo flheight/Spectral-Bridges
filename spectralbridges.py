@@ -22,11 +22,7 @@ class _KMeans:
         )[0].astype(np.float32)
 
         kmeans.centroids.resize(init_centroids.size)
-        faiss.memcpy(
-            kmeans.centroids.data(),
-            faiss.swig_ptr(init_centroids),
-            init_centroids.size * 4,
-        )
+        faiss.copy_array_to_vector(init_centroids.ravel(), kmeans.centroids)
         kmeans.niter = self.n_iter
         kmeans.min_points_per_centroid = 0
         kmeans.max_points_per_centroid = -1
