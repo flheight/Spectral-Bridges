@@ -5,6 +5,32 @@ import faiss
 
 
 class _KMeans:
+    """K-means clustering using FAISS.
+
+    Parameters:
+    -----------
+    n_clusters : int
+        The number of clusters to form.
+    n_iter : int, optional, default=20
+        Number of iterations to run the k-means algorithm.
+    n_local_trials : int or None, optional, default=None
+        Number of seeding trials for centroids initialization.
+    random_state : int or None, optional, default=None
+        Determines random number generation for centroid initialization.
+
+    Attributes:
+    -----------
+    cluster_centers_ : numpy.ndarray
+        Coordinates of cluster centers.
+    labels_ : numpy.ndarray
+        Labels of each point (index) in X.
+
+    Methods:
+    --------
+    fit(X):
+        Run k-means clustering on the input data X.
+    """
+
     def __init__(self, n_clusters, n_iter=20, n_local_trials=None, random_state=None):
         self.n_clusters = n_clusters
         self.n_iter = n_iter
@@ -12,6 +38,13 @@ class _KMeans:
         self.random_state = random_state
 
     def fit(self, X):
+        """Run k-means clustering on the input data X.
+
+        Parameters:
+        -----------
+        X : numpy.ndarray
+            Input data to cluster.
+        """
         index = faiss.IndexFlatL2(X.shape[1])
         kmeans = faiss.Clustering(X.shape[1], self.n_clusters)
         init_centroids = kmeans_plusplus(
@@ -35,11 +68,38 @@ class _KMeans:
 
 
 class _SpectralClustering:
+    """Spectral clustering based on Laplacian matrix.
+
+    Parameters:
+    -----------
+    n_clusters : int
+        The number of clusters to form.
+    random_state : int
+        Determines random number generation for centroid initialization.
+
+    Attributes:
+    -----------
+    labels_ : numpy.ndarray
+        Labels of each point (index) in the affinity matrix.
+
+    Methods:
+    --------
+    fit(affinity):
+        Fit the spectral clustering model on the affinity matrix.
+    """
+
     def __init__(self, n_clusters, random_state):
         self.n_clusters = n_clusters
         self.random_state = random_state
 
     def fit(self, affinity):
+        """Fit the spectral clustering model on the affinity matrix.
+
+        Parameters:
+        -----------
+        affinity : numpy.ndarray
+            Affinity matrix representing pairwise similarity between points.
+        """
         L = laplacian(affinity, normed=True)
 
         eigvecs = np.linalg.eigh(L)[1]
@@ -52,12 +112,40 @@ class _SpectralClustering:
 
 
 class SpectralBridges:
+    """Spectral Bridges clustering algorithm.
+
+    Parameters:
+    -----------
+    n_clusters : int
+        The number of clusters to form.
+    n_nodes : int
+        Number of nodes or initial clusters.
+    random_state : int or None, optional, default=None
+        Determines random number generation for centroid initialization.
+
+    Methods:
+    --------
+    fit(X, M=1e4):
+        Fit the Spectral Bridges model on the input data X.
+    predict(x):
+        Predict the nearest cluster index for each input data point x.
+    """
+
     def __init__(self, n_clusters, n_nodes, random_state=None):
         self.n_clusters = n_clusters
         self.n_nodes = n_nodes
         self.random_state = random_state
 
     def fit(self, X, M=1e4):
+        """Fit the Spectral Bridges model on the input data X.
+
+        Parameters:
+        -----------
+        X : numpy.ndarray
+            Input data to cluster.
+        M : float, optional, default=1e4
+            Scaling parameter for affinity matrix computation.
+        """
         kmeans = _KMeans(self.n_nodes, random_state=self.random_state)
         kmeans.fit(X)
 
@@ -101,6 +189,18 @@ class SpectralBridges:
         ]
 
     def predict(self, x):
+        """Predict the nearest cluster index for each input data point x.
+
+        Parameters:
+        -----------
+        x : numpy.ndarray
+            Input data points to predict clusters.
+
+        Returns:
+        --------
+        numpy.ndarray
+            Predicted cluster indices for each input data point.
+        """
         min_dists = np.empty((self.n_clusters, x.shape[0]))
 
         for i, cluster in enumerate(self.clusters):
