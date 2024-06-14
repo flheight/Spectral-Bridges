@@ -5,16 +5,20 @@ import faiss
 
 
 class _KMeans:
-    def __init__(self, n_clusters, n_iter=20, random_state=None):
+    def __init__(self, n_clusters, n_iter=20, n_local_trials=1, random_state=None):
         self.n_clusters = n_clusters
         self.n_iter = n_iter
+        self.n_local_trials = n_local_trials
         self.random_state = random_state
 
     def fit(self, X):
         index = faiss.IndexFlatL2(X.shape[1])
         kmeans = faiss.Clustering(X.shape[1], self.n_clusters)
         init_centroids = kmeans_plusplus(
-            X, self.n_clusters, n_local_trials=1, random_state=self.random_state
+            X,
+            self.n_clusters,
+            n_local_trials=self.n_local_trials,
+            random_state=self.random_state,
         )[0].astype(np.float32)
 
         kmeans.centroids.resize(init_centroids.size)
