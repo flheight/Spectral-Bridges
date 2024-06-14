@@ -15,7 +15,7 @@ X = PCA(n_components=64, random_state=42).fit_transform(X)
 
 k = 10
 
-net = SpectralBridges(n_clusters=k, n_nodes=500)
+net = SpectralBridges(n_clusters=k, n_nodes=500, n_local_trials=1)
 
 ari = 0
 for i in range(10):
