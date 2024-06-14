@@ -5,7 +5,7 @@ import faiss
 
 
 class _KMeans:
-    def __init__(self, n_clusters, n_iter=20, n_local_trials=1, random_state=None):
+    def __init__(self, n_clusters, n_iter=20, n_local_trials=None, random_state=None):
         self.n_clusters = n_clusters
         self.n_iter = n_iter
         self.n_local_trials = n_local_trials
