@@ -7,9 +7,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 
-# Set seed
-np.random.seed(0)
-
 # Function to load data
 def load_data(file_name):
     data = np.genfromtxt(f"datasets/{file_name}", delimiter=",")
