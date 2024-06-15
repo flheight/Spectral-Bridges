@@ -58,8 +58,6 @@ df_KMumap['label'] = y_pred_kmeans
 
 # Ensure label column is of type string for proper color mapping in plotly
 df_GTumap['label'] = df_GTumap['label'].astype(int).astype(str)
-df_SBumap['label'] = df_SBumap['label'].astype(int).astype(str)
-df_KMumap['label'] = df_KMumap['label'].astype(int).astype(str)
 
 # Sort Ground Truth data by label to ensure legend is ordered
 df_GTumap = df_GTumap.sort_values(by='label')
