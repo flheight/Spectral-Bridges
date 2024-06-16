@@ -190,10 +190,10 @@ class SpectralBridges:
             projs = np.dot(X_centered[i], segments[i].T)
             affinity[i] = np.maximum(projs, 0).sum(axis=0)
 
-        affinity = np.power((affinity + affinity.T) / (counts * dists), 0.5)
+        affinity = (affinity + affinity.T) / (counts * dists)
         affinity -= 0.5 * affinity.max()
 
-        q1, q3 = np.quantile(affinity, [0.25, 0.75])
+        q1, q3 = np.quantile(affinity, [0.1, 0.9])
 
         gamma = np.log(self.M) / (q3 - q1)
         affinity = np.exp(gamma * affinity)
