@@ -120,7 +120,7 @@ class SpectralBridges:
         The number of clusters to form.
     n_nodes : int
         Number of nodes or initial clusters.
-    M : float, optional, default=1e4
+    M : float, optional, default=1e3
         Scaling parameter for affinity matrix computation.
     n_iter : int, optional, default=20
         Number of iterations to run the k-means algorithm.
@@ -141,7 +141,7 @@ class SpectralBridges:
         self,
         n_clusters,
         n_nodes,
-        M=1e4,
+        M=1e3,
         n_iter=20,
         n_local_trials=None,
         random_state=None,
