@@ -120,7 +120,7 @@ class SpectralBridges:
         The number of clusters to form.
     n_nodes : int
         Number of nodes or initial clusters.
-    M : float, optional, default=1e3
+    M : float, optional, default=1e4
         Scaling parameter for affinity matrix computation.
     n_iter : int, optional, default=20
         Number of iterations to run the k-means algorithm.
@@ -141,7 +141,7 @@ class SpectralBridges:
         self,
         n_clusters,
         n_nodes,
-        M=1e3,
+        M=1e4,
         n_iter=20,
         n_local_trials=None,
         random_state=None,
@@ -188,9 +188,9 @@ class SpectralBridges:
 
         for i in range(self.n_nodes):
             projs = np.dot(X_centered[i], segments[i].T)
-            affinity[i] = np.maximum(projs, 0).sum(axis=0)
+            affinity[i] = np.linalg.norm(np.maximum(projs, 0), axis=0)
 
-        affinity = (affinity + affinity.T) / (counts * dists)
+        affinity = (affinity + affinity.T) / (np.sqrt(counts) * dists)
         affinity -= 0.5 * affinity.max()
 
         q1, q3 = np.quantile(affinity, [0.1, 0.9])
