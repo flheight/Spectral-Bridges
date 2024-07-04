@@ -42,7 +42,7 @@ for i in range(k):
 
 # Update layout
 fig.update_layout(
-    plot_bgcolor='white',
+    plot_bgcolor='whitesmoke',
     xaxis_title="X",
     yaxis_title="Y",
     width=800,
