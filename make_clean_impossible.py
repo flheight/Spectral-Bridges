@@ -29,7 +29,7 @@ for i in range(k):
         x=X[(y == i), 0], 
         y=X[(y == i), 1], 
         mode='markers', 
-        marker=dict(color='black', size=4), 
+        marker=dict(color='black', size=5), 
     ))
     
 for i in range(k):
@@ -37,7 +37,7 @@ for i in range(k):
         x=net.clusters_[i][:, 0], 
         y=net.clusters_[i][:, 1], 
         mode='markers', 
-        marker=dict(size=10), 
+        marker=dict(size=15), 
     ))
 
 # Update layout
