@@ -77,7 +77,7 @@ def create_scatter_plot(df, show_legend):
             name=label
         ))
     fig.update_layout(
-        plot_bgcolor='white',
+        plot_bgcolor='whitesmoke',
         showlegend=show_legend,
         legend_title_text='Label',
         legend_traceorder='normal',
