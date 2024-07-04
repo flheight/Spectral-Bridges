@@ -57,6 +57,7 @@ for dataset_name, file_name in datasets:
     # Create scatter plots
     fig = create_scatter_plot(df, show_legend=False)
     
-    # Save the plots to PDF files
+    # Save the plots to pdf files
+    pio.kaleido.scope.mathjax = None
     pio.write_image(fig, f'{dataset_name}.pdf', format='pdf')
 
