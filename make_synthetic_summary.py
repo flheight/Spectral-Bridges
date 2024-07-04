@@ -196,6 +196,7 @@ for i, file in enumerate(file_labels, start=1):
     )  # Remove x-axis label for better space utilization
 
 fig.update_layout(
+    plot_bgcolor='white',
     height=1600,
     width=1200,
     title_text="",
