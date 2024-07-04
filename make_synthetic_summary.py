@@ -209,4 +209,5 @@ for i in range(2):
 
 
 # Save the figure as an pdf file
+pio.kaleido.scope.mathjax = None
 pio.write_image(fig, "synthetic_summary.pdf")
