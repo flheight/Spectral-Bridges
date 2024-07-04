@@ -178,5 +178,5 @@ for i in range(2):
     fig.layout.annotations[i].font.size = 25  # Increase subplot titles font size
 
 
-# Save the figure as an HTML file
+# Save the figure as an pdf file
 pio.write_image(fig, "cancer_summary.pdf")
