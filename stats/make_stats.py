@@ -61,6 +61,7 @@ for i, (method, score) in enumerate(zip(methods, nmi_scores)):
 
 # Update layout with larger and bold axis titles and tick labels
 fig.update_layout(
+    plot_bgcolor='whitesmoke',
     width=1200,
     height=600,
     xaxis=dict(
