@@ -22,7 +22,7 @@ guess = net.predict(X)
 
 for i in range(k):
     plt.scatter(X[(y == i), 0], X[(y == i), 1], color='black', s=.5)
-    plt.scatter(net.clusters_[i][:, 0], net.clusters_[i][:, 1], color=colors[i], label=f'Cluster {i}')
+    plt.scatter(net.cluster_centers_[i][:, 0], net.cluster_centers_[i][:, 1], color=colors[i], label=f'Cluster {i}')
 
 plt.show()
 
