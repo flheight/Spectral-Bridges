@@ -44,8 +44,8 @@ for i in range(k):
     
 for i in range(k):
     fig.add_trace(go.Scatter(
-        x=net.clusters_[i][:, 0], 
-        y=net.clusters_[i][:, 1], 
+        x=net.cluster_centers_[i][:, 0], 
+        y=net.cluster_centers_[i][:, 1], 
         mode='markers', 
         marker=dict(size=15), 
     ))
